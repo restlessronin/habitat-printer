@@ -91,6 +91,8 @@ solid cube
 endsolid cube
 `;
 
+const cubeBlob = new Blob([cubeStl], { type: 'text/plain' });
+
 document.addEventListener('DOMContentLoaded', () => {
   const loadSTLButton = document.getElementById('loadSTL') as HTMLButtonElement;
   const generateGCodeButton = document.getElementById('generateGCode') as HTMLButtonElement;
@@ -111,6 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadSTLButton.onclick = () => {
     const loader = new STLLoader();
+    loader.load(URL.createObjectURL(cubeBlob), function (geometry) {
+      const material = new THREE.MeshNormalMaterial();
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+      camera.position.z = 5;
+      animate();
+    });
   };
 
   generateGCodeButton.onclick = () => {
