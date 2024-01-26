@@ -11,9 +11,35 @@
     <script src="/code/engine.js"></script>
   </head>
   <body>
-    <canvas id="canvas"></canvas>
+    <script>
+      let saveit = '';
+      function display_message(msg) {
+        document.getElementById('gfoot').innerText = msg ? Object.keys(msg).join(' - ') : '';
+      }
+      function display_gcode(gcode) {
+        document.getElementById('gbody').innerText = saveit = gcode;
+        display_message();
+        document.getElementById('dfoot').style.display = 'block';
+        document.getElementById('gfoot').style.display = '';
+      }
+      function download() {
+        let blob = new Blob([saveit], { type: 'octet/stream' });
+        let url = window.URL.createObjectURL(blob);
+        document.getElementById(
+          'download'
+        ).innerHTML = `<a id="xo" href="${url}" download="sample.gcode"></a>`;
+        document.getElementById('xo').click();
+      }
+    </script>
     <button id="loadSTL">Load STL</button>
     <button id="generateGCode">Generate G-Code</button>
+    <div id="gcode">
+      <div id="ghead">gcode output</div>
+      <div id="gbody"></div>
+      <div id="gfoot"></div>
+      <div id="dfoot"><button onclick="download()">download</button></div>
+    </div>
+    <canvas id="canvas"></canvas>
 
     <script src="dist/bundle.js"></script>
   </body>

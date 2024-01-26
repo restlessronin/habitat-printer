@@ -92,12 +92,12 @@ endsolid cube
 `;
 
 const cubeBlob = new Blob([cubeStl], { type: 'text/plain' });
+const cubeURL = URL.createObjectURL(cubeBlob);
 
 document.addEventListener('DOMContentLoaded', () => {
   const loadSTLButton = document.getElementById('loadSTL') as HTMLButtonElement;
   const generateGCodeButton = document.getElementById('generateGCode') as HTMLButtonElement;
 
-  // Initialize Three.js scene
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadSTLButton.onclick = () => {
     const loader = new STLLoader();
-    loader.load(URL.createObjectURL(cubeBlob), function (geometry) {
+    loader.load(cubeURL, function (geometry) {
       const material = new THREE.MeshNormalMaterial();
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   generateGCodeButton.onclick = () => {
-    const gcode = stl2gcode(cube.geometry);
+    stl2gcode(cubeURL);
   };
 
   const animate = () => {
