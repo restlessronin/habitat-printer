@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-// Import Kiri:Moto (assuming available as a module, otherwise include via script tag)
-// import * as KIRI from 'kiri';
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import stl2gcode from './stl2gcode';
 
 document.addEventListener('DOMContentLoaded', () => {
   const loadSTLButton = document.getElementById('loadSTL') as HTMLButtonElement;
@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
 
-  // Load STL Functionality
-  loadSTLButton.onclick = () => {};
+  loadSTLButton.onclick = () => {
+    const loader = new STLLoader();
+  };
 
-  // Generate G-Code Functionality
   generateGCodeButton.onclick = () => {
-    // Implement G-Code generation using Kiri:Moto
+    const gcode = stl2gcode(cube.geometry);
   };
 
   const animate = () => {
