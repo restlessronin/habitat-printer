@@ -1,0 +1,34 @@
+{
+  "name": "minvayu",
+  "version": "0.0.1",
+  "description": "App to generate STL for simple rooms and output it as G-code",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && node esbuild.config.js",
+    "start": "npx http-server ./",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/restlessronin/minvayu.git"
+  },
+  "keywords": [
+    "STL",
+    "G-code",
+    "3D-print"
+  ],
+  "author": "minvayu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/restlessronin/minvayu/issues"
+  },
+  "homepage": "https://github.com/restlessronin/minvayu#readme",
+  "dependencies": {
+    "three": "^0.160.1"
+  },
+  "devDependencies": {
+    "@types/three": "^0.160.0",
+    "esbuild": "^0.19.12",
+    "typescript": "^5.3.3"
+  }
+}
