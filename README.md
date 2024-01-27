@@ -20,5 +20,6 @@ To get started with HabitatPrinter, clone the repository and follow these steps:
 git clone https://github.com/yourusername/habitat-printer.git
 cd habitat-printer
 npm install
-npm start
+npm run build
+npm run start
 ```
