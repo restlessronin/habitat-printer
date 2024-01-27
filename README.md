@@ -17,10 +17,15 @@ This application was created with the assistance of GPT-3.5 and 4. However, ever
 
 ## Getting Started
 
-To get started with HabitatPrinter, clone the repository and follow these steps:
+To get started with HabitatPrinter, clone the repository using git from the command line as shown below (or from your IDE).
 
 ```bash
-git clone https://github.com/yourusername/habitat-printer.git
+git clone https://github.com/restlessronin/habitat-printer.git
+```
+
+and follow these steps:
+
+```bash
 cd habitat-printer
 npm install
 npm run build
