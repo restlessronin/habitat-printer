@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc && node esbuild.config.js",
     "start": "npx http-server ./",
-    "test": "test"
+    "download": "node dist/downloadKiri"
   },
   "repository": {
     "type": "git",
@@ -27,8 +27,11 @@
     "three": "^0.160.1"
   },
   "devDependencies": {
+    "@types/node": "^20.11.7",
     "@types/three": "^0.160.0",
+    "axios": "^1.6.7",
     "esbuild": "^0.19.12",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "wget": "^0.0.1"
   }
 }
