@@ -8,9 +8,12 @@ This application was created with the assistance of GPT-3.5 and 4. However, ever
 
 ## Features
 
-- Intuitive interface for designing homes.
 - Integrated STL file generation for 3D printing.
-- Real-time 3D preview of house designs.
+- 3D preview of house designs.
+
+## Planned Feature
+
+- Intuitive interface for designing homes (when text-to-3DModel becomes reliable)
 
 ## Getting Started
 
