@@ -2,7 +2,7 @@
 
 ## Introduction
 
-HabitatPrinter is a TypeScript-based web application designed for designing and 3D printing sustainable, self-sufficient homes. Embodying the spirit of "radical self-sufficiency," this tool aims to democratize the creation of eco-friendly living spaces.
+HabitatPrinter is a TypeScript-based web application Proof-of-Concept for designing and 3D printing sustainable, self-sufficient homes. Embodying the spirit of "radical self-sufficiency," this tool aims to democratize the creation of eco-friendly living spaces.
 
 This application was created with the assistance of GPT-3.5 and 4. However, every line of code is human curated.
 
