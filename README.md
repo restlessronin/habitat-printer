@@ -31,3 +31,5 @@ npm install
 npm run build
 npm run start
 ```
+
+Then open the browser and navigate to http://localhost:8080.
