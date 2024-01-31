@@ -10,6 +10,7 @@ export class LLMPrompter {
   static async prompt2STL(prompt: string) {
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
     const result = await model.generateContent(prompt);
+    console.log(result);
     const val = result.response.candidates[0].content.parts[0].text;
     console.log(val);
     return val;

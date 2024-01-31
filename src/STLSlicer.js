@@ -1,8 +1,8 @@
 export class STLSlicer {
-  static async toGcode(loadPath, vueApp) {
+  static async toGcode(loadPath, slicerMessage, displayGcode) {
     kiri
       .newEngine()
-      .setListener(vueApp.slicerMessage)
+      .setListener(slicerMessage)
       .load(loadPath)
       .then(eng =>
         eng.setProcess({
@@ -21,7 +21,7 @@ export class STLSlicer {
       .then(eng => eng.slice())
       .then(eng => eng.prepare())
       .then(eng => eng.export())
-      .then(vueApp.displayGcode);
+      .then(displayGcode);
   }
 }
 

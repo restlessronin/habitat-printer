@@ -1,46 +1,162 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>STL Viewer and G-code Generator</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.js"></script>
+    <script src="/code/engine.js"></script>
     <style>
-      canvas {
+      #canvas {
+        border: 1px solid black;
         width: 100%;
-        height: 100%;
+        max-width: 100%;
+        height: auto;
       }
     </style>
-    <script src="/code/engine.js"></script>
   </head>
   <body>
-    <script>
-      let saveit = '';
-      function display_message(msg) {
-        document.getElementById('gfoot').innerText = msg ? Object.keys(msg).join(' - ') : '';
-      }
-      function display_gcode(gcode) {
-        document.getElementById('gbody').innerText = saveit = gcode;
-        display_message();
-        document.getElementById('dfoot').style.display = 'block';
-        document.getElementById('gfoot').style.display = '';
-      }
-      function download() {
-        let blob = new Blob([saveit], { type: 'octet/stream' });
-        let url = window.URL.createObjectURL(blob);
-        document.getElementById(
-          'download'
-        ).innerHTML = `<a id="xo" href="${url}" download="sample.gcode"></a>`;
-        document.getElementById('xo').click();
-      }
-    </script>
-    <button id="loadSTL">Load STL</button>
-    <button id="generateGCode">Generate G-Code</button>
-    <div id="gcode">
-      <div id="ghead">gcode output</div>
-      <div id="gbody"></div>
-      <div id="gfoot"></div>
-      <div id="dfoot"><button onclick="download()">download</button></div>
+    <div id="app">
+      <v-app>
+        <v-container>
+          <v-row>
+            <v-col cols="3">
+              <v-slider
+                v-for="(value, key) in dimensions"
+                :key="key"
+                :label="`${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}`"
+                v-model="dimensions[key]"
+                :min="0"
+                :max="20"
+                :step="0.5"
+                thumb-label="always"
+              ></v-slider>
+            </v-col>
+            <v-col cols="9">
+              <v-textarea v-model="promptText" outlined auto-grow rows="2"></v-textarea>
+              <v-btn @click="toLLM">To LLM</v-btn>
+              <v-textarea v-model="stlOutput" outlined rows="6"></v-textarea>
+              <v-btn @click="load">Load</v-btn>
+              <v-btn @click="render">Render</v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <canvas id="canvas"></canvas>
+              <v-btn @click="generate">Generate</v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-textarea v-model="gCode" outlined rows="12"></v-textarea>
+            </v-col>
+            <v-snackbar v-model="showSnackbar" :timeout="3000" bottom right>
+              {{ gCodeMessage }}
+            </v-snackbar>
+          </v-row>
+        </v-container>
+      </v-app>
     </div>
-    <canvas id="canvas"></canvas>
-
     <script src="dist/bundle.js"></script>
+    <script>
+      const cubeBlob = new Blob([cubeStl], { type: 'text/plain' }); // Ensure 'cubeStl' is defined
+      const cubeURL = URL.createObjectURL(cubeBlob);
+
+      const { createApp } = Vue;
+      const { createVuetify } = Vuetify;
+
+      const vuetify = createVuetify();
+      const app = createApp({
+        data() {
+          return {
+            modelViewer: null,
+            stlSlicer: null,
+            llmPrompter: null,
+            cubeStl: null,
+            dimensions: {
+              width: 4,
+              length: 5,
+              height: 3,
+            },
+            promptText: '',
+            stlOutput: '',
+            showSnackbar: true,
+            gCodeMessage: '',
+            gCode: '',
+            saveit: '',
+            isDownloadFooterEnabled: false,
+          };
+        },
+        watch: {
+          dimensions: {
+            handler(newVal, oldVal) {
+              this.promptText = this.llmPrompter.createPrompt(
+                newVal.length,
+                newVal.width,
+                newVal.height
+              );
+            },
+            deep: true,
+          },
+        },
+        methods: {
+          async toLLM() {
+            this.stlOutput = this.llmPrompter.prompt2STL(this.promptText);
+          },
+          load() {
+            this.stlOutput = this.cubeStl;
+          },
+          render() {
+            const stlBlob = new Blob([this.stlOutput], { type: 'text/plain' }); // Ensure 'cubeStl' is defined
+            const stlURL = window.URL.createObjectURL(stlBlob);
+            this.modelViewer.load(stlURL);
+          },
+          async generate() {
+            this.stlSlicer.toGcode(
+              cubeURL,
+              msg => {
+                this.slicerMessage(msg);
+              },
+              gcode => {
+                this.displayGcode(gcode);
+              }
+            );
+          },
+          slicerMessage(msg) {
+            this.gCodeMessage = msg ? Object.keys(msg).join(' - ') : '';
+          },
+          displayGcode(gcode) {
+            this.gCode = gcode;
+            this.saveit = gcode;
+            this.gCodeMessage = '';
+            this.isDownloadFooterEnabled = true;
+          },
+          download() {
+            const blob = new Blob([this.saveit], { type: 'octet/stream' });
+            const url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'sample.gcode';
+            a.click();
+            window.URL.revokeObjectURL(url);
+          },
+        },
+        mounted() {
+          this.modelViewer = window.ModelViewer.create(window, document, 'canvas');
+          this.stlSlicer = window.STLSlicer;
+          this.llmPrompter = window.LLMPrompter;
+          this.cubeStl = window.cubeStl;
+          this.promptText = this.llmPrompter.createPrompt(
+            this.dimensions.length,
+            this.dimensions.width,
+            this.dimensions.height
+          );
+        },
+      });
+
+      app.use(vuetify).mount('#app');
+    </script>
   </body>
 </html>
