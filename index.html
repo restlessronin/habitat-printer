@@ -36,16 +36,15 @@
             </v-col>
             <v-col cols="9">
               <v-textarea v-model="promptText" outlined auto-grow rows="2"></v-textarea>
-              <v-btn @click="toLLM">To LLM</v-btn>
+              <v-btn @click="fromLLM">From LLM</v-btn><v-btn @click="load">Local</v-btn>
               <v-textarea v-model="stlOutput" outlined rows="6"></v-textarea>
-              <v-btn @click="load">Load</v-btn>
               <v-btn @click="render">Render</v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
               <canvas id="canvas"></canvas>
-              <v-btn @click="generate">Generate</v-btn>
+              <v-btn @click="generate">G-Code</v-btn>
             </v-col>
           </v-row>
           <v-row>
@@ -102,7 +101,7 @@
           },
         },
         methods: {
-          async toLLM() {
+          async fromLLM() {
             const result = await this.llmPrompter.queryForSTL(this.promptText);
             this.stlOutput = result.response.candidates[0].content.parts[0].text;
           },
