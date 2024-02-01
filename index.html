@@ -108,7 +108,7 @@
               would have a more complete prompt including doors, windows, wall taper, etc.)
             </p>
             <v-row>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="4">
                 <v-slider
                   v-for="(value, key) in dimensions"
                   :key="key"
@@ -120,13 +120,15 @@
                   thumb-label="always"
                 ></v-slider>
               </v-col>
-              <v-col cols="12" md="9">
+              <v-col cols="12" md="8">
                 <v-textarea v-model="promptText" outlined auto-grow rows="2"></v-textarea>
               </v-col>
             </v-row>
             <p>
-              Here we query the LLM and show the model code received from it, but currently LLMs are
-              unable to do this correctly, so for the demo we can load a local model instead.
+              Here we query the LLM and show the model code received from it. Currently LLMs are
+              unable to generate correct 3D models, so for the demo we need to load a default local
+              model instead. We expect this will be solved in the near future, either by LLMs or a
+              text-to-3dModel neural net.
             </p>
             <v-btn @click="fromLLM">From LLM</v-btn>
             <v-btn @click="load">Local</v-btn>
