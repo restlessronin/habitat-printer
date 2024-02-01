@@ -95,6 +95,18 @@
       <div id="app">
         <v-app>
           <v-container>
+            <p>
+              This is a Proof of Concept for a radically simple house printing experience, which is
+              entirely browser based, and can be run on a mobile phone. The end-user can simply
+              describe in words the house they want, visualize it with a 3D rendering, and when
+              satisified, ask for it to be printed. Thanks to ChatGPT, we managed to create this POC
+              in a one and a half day hackathon whose participants knew nothing about 3D printing
+              before.
+            </p>
+            <p>
+              This is a demo of creating a simple prompt to specify a room (in actual practice, we
+              would have a more complete prompt including doors, windows, wall taper, etc.)
+            </p>
             <v-row>
               <v-col cols="12" md="3">
                 <v-slider
@@ -110,18 +122,27 @@
               </v-col>
               <v-col cols="12" md="9">
                 <v-textarea v-model="promptText" outlined auto-grow rows="2"></v-textarea>
-                <v-btn @click="fromLLM">From LLM</v-btn><v-btn @click="load">Local</v-btn>
-                <v-textarea v-model="stlOutput" outlined rows="6"></v-textarea>
-                <v-btn @click="render">Render</v-btn>
               </v-col>
             </v-row>
+            <p>
+              Here we query the LLM and show the model code received from it, but currently LLMs are
+              unable to do this correctly, so for the demo we can load a local model instead.
+            </p>
+            <v-btn @click="fromLLM">From LLM</v-btn>
+            <v-btn @click="load">Local</v-btn>
+            <v-row cols="12">
+              <v-textarea v-model="stlOutput" outlined></v-textarea>
+            </v-row>
+            <p>The model is rendered here...</p>
             <v-row>
+              <v-btn @click="render">Render</v-btn>
               <v-col cols="12">
                 <canvas id="canvas"></canvas>
-                <v-btn @click="generate">G-Code</v-btn>
               </v-col>
             </v-row>
+            <p>and once confirmed, the printer instructions can be generated</p>
             <v-row>
+              <v-btn @click="generate">G-Code</v-btn>
               <v-col cols="12">
                 <v-textarea v-model="gCode" outlined rows="12"></v-textarea>
               </v-col>
@@ -129,6 +150,11 @@
                 {{ gCodeMessage }}
               </v-snackbar>
             </v-row>
+            <p>
+              In a fully refined application, the user experience would be much simpler, with no
+              need to show the model generated STL code, or the G-Code, and perhaps not even the
+              detailed prompt.
+            </p>
           </v-container>
         </v-app>
       </div>
