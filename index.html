@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>STL Viewer and G-code Generator</title>
+    <title>Habitat Printer - Text to G-code</title>
     <script src="https://unpkg.com/vue@3"></script>
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.js"></script>
@@ -58,7 +58,6 @@
         </v-container>
       </v-app>
     </div>
-    <script src="dist/bundle.js"></script>
     <script>
       const cubeBlob = new Blob([cubeStl], { type: 'text/plain' }); // Ensure 'cubeStl' is defined
       const cubeURL = URL.createObjectURL(cubeBlob);
