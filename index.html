@@ -103,7 +103,8 @@
         },
         methods: {
           async toLLM() {
-            this.stlOutput = this.llmPrompter.prompt2STL(this.promptText);
+            const result = await this.llmPrompter.queryForSTL(this.promptText);
+            this.stlOutput = result.response.candidates[0].content.parts[0].text;
           },
           load() {
             this.stlOutput = this.cubeStl;
